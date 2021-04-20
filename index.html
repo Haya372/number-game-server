@@ -13,17 +13,105 @@
         <input id="input_msg" autocomplete="off" /><button>Send</button>
       </form>
     </div>
+    <div>
+      <p>join</p>
+      <form id="join_test">
+        <p>username</p><input id="username"/>
+        <p>room_id</p><input id="room_id"/>
+        <button>join</button>
+      </form>
+    </div>
+    <div>
+      <p>get rooms</p>
+      <button id="get_test">list</button>
+    </div>
+    <div>
+      <p>start</p>
+        <button id="start_test">start</button>
+    </div>
+
+    <div>
+      <p>choose test</p>
+        <input id="number"/>
+        <button id="choose_test">choose</button>
+    </div>
+
+    <div>
+      <p>finish</p>
+        <button id="finish_test">finish</button>
+    </div>
   <script>
     var socket = io();
+    var turn_num = 1;
+    var user_id;
+    var room_id;
+
     $(function(){
       $('#create_test').submit(function(){
+        room_id = $('#input_msg').val();
         socket.emit('create', $('#input_msg').val(), "aa");
         $('#input_msg').val('');
         return false;
       });
 
+      $('#join_test').submit(function(){
+        room_id = $('#room_id').val();
+        socket.emit('join', $('#room_id').val(), $('#username').val());
+        return false;
+      });
+
+      $('#get_test').on('click', ()=>{
+        socket.emit('get rooms');
+        console.log('rooms')
+      })
+
+      $('#start_test').on('click', ()=>{
+        socket.emit('start', room_id, 4);
+      });
+
+      $('#choose_test').on('click', ()=>{
+        turn_num += 1;
+        socket.emit('choose', room_id, user_id, turn_num, $('#number').val());
+      });
+
+      $('#finish_test').on('click', ()=>{
+        socket.emit('finish', room_id);
+      });
+
       socket.on('enter', (data) => {
+        console.log('enter');
         console.log(JSON.stringify(data));
+      });
+
+      socket.on('user_id', (data) => {
+        console.log('user_id');
+        console.log(JSON.stringify(data));
+        user_id = data.user_id;
+      });
+
+      socket.on('room list', (data) => {
+        console.log(JSON.stringify(data));
+      });
+
+      socket.on('start', (data) => {
+        console.log('start')
+        console.log(JSON.stringify(data));
+      });
+
+      socket.on('everyone selected', (data) => {
+        console.log('everyone selected')
+        console.log(JSON.stringify(data));
+      });
+
+      socket.on('finish', () => {
+        console.log('finish');
+        turn_num = 1;
+        room_id = null;
+      });
+
+      socket.on('err', (data) => {
+        console.log('error')
+        console.log(data);
       });
 
     });

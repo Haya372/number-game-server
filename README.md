@@ -20,6 +20,6 @@ express + socketioによる実装
 | start | { members : ['user1', 'user2', ... ], turns: turns } | ゲームの始まりとターン数を通知 |
 | everyone selected | { turn_num : [現在のターン数], numbers: [2, 4, 1, ... ] } | 全員が選択し終わったことを通知。 |
 | finish | | ゲーム終了を通知 |
-| error | { msg: 'エラーメッセージ' } | エラーを通知 |
+| err | { msg: 'エラーメッセージ' } | エラーを通知 |
 
 server -> clientは基本的にJSONでデータを渡す

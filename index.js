@@ -30,6 +30,7 @@ io.on('connection',function(socket){
   socket.on('get rooms', () => {
     let res = [];
     Object.keys(rooms).forEach((key) => {
+      console.log(key)
       if(rooms[key].turns) return;
       res.push(key);
     });
@@ -39,22 +40,23 @@ io.on('connection',function(socket){
   });
 
   socket.on('join', (room_id, username) => {
-    if(Object.keys(rooms).findIndex(room_id) === -1){
-      socket.emit('error', {
+    if(!Object.keys(rooms).includes(room_id)){
+      socket.emit('err', {
         msg: 'room "' + room_id + '" not found'
       });
       return;
     }
 
     if(rooms[room_id].turns){
-      socket.emit('error', {
+      socket.emit('err', {
         msg: 'room "' + room_id + '" members have already started the game'
       });
       return;
     }
 
-    let user_id = rooms[room_id].members.length();
+    let user_id = rooms[room_id].members.length;
     rooms[room_id].members.push(username);
+    socket.join(room_id);
     socket.emit('user_id', {
       user_id: user_id
     });
@@ -64,24 +66,24 @@ io.on('connection',function(socket){
   });
 
   socket.on('start', (room_id, turns) => {
-    if(Object.keys(rooms).findIndex(room_id) === -1){
-      socket.emit('error', {
+    if(!Object.keys(rooms).includes(room_id)){
+      socket.emit('err', {
         msg: 'room "' + room_id + '" not found'
       });
       return;
     }
     
     rooms[room_id].turns = turns;
-    rooms[room_id].tmp_turn = 1;
-    io.to(room_id).emit('', {
+    rooms[room_id].turn_num = 1;
+    io.to(room_id).emit('start', {
       members: rooms[room_id].members,
       turns: turns
     });
   });
 
   socket.on('choose', (room_id, user_id, turn_num, number) => {
-    if(rooms[room_id].tmp_turn !== turn_num){
-      socket.emit('error', {
+    if(rooms[room_id].turn_num !== turn_num){
+      socket.emit('err', {
         msg: 'now turn is not ' + turn_num + ''
       });
       return;
@@ -93,7 +95,7 @@ io.on('connection',function(socket){
     }
 
     if(rooms[room_id].actions[user_id] !== -1){
-      socket.emit('error', {
+      socket.emit('err', {
         msg: 'you have already selected ' + rooms[room_id].actions[user_id]
       });
       return;
@@ -103,9 +105,9 @@ io.on('connection',function(socket){
     if(!rooms[room_id].actions.includes(-1)){
       io.to(room_id).emit('everyone selected', {
         turn_num: rooms[room_id].turn_num,
-        numbers: rooms[room_id].actions[user_id]
+        numbers: rooms[room_id].actions
       });
-      rooms[room_id].actions[user_id].fill(-1);
+      rooms[room_id].actions.fill(-1);
       if(rooms[room_id].turn_num == rooms[room_id].turns){
         rooms[room_id].turn_num = 1;
       }else{
