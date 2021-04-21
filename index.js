@@ -118,7 +118,6 @@ io.on('connection',function(socket){
     socket.on('finish', (room_id) => {
       io.to(room_id).emit('finish');
       delete rooms[room_id];
-      io.socketsLeave(room_id);
     });
   });
 });

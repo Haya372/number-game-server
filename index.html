@@ -70,8 +70,8 @@
       });
 
       $('#choose_test').on('click', ()=>{
-        turn_num += 1;
         socket.emit('choose', room_id, user_id, turn_num, $('#number').val());
+        turn_num += 1;
       });
 
       $('#finish_test').on('click', ()=>{
