@@ -30,9 +30,11 @@ io.on('connection',function(socket){
   socket.on('get rooms', () => {
     let res = [];
     Object.keys(rooms).forEach((key) => {
-      console.log(key)
       if(rooms[key].turns) return;
-      res.push(key);
+      res.push({
+        room_id: key,
+        host: rooms[key].members[0]
+      });
     });
     socket.emit('room list', {
       rooms: res
