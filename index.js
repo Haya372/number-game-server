@@ -33,7 +33,8 @@ io.on('connection',function(socket){
       if(rooms[key].turns) return;
       res.push({
         room_id: key,
-        host: rooms[key].members[0]
+        host: rooms[key].members[0],
+        people: rooms[key].members.length
       });
     });
     socket.emit('room list', {
