@@ -16,7 +16,7 @@ express + socketioによる実装
 | --- | --- | --- |
 | enter | { members : ['user1', 'user2', ... ] } | 誰かが部屋に入った時、その部屋のメンバー全員に今いるメンバーを通知 |
 | user_id | { user_id: [ユーザーID] } | ユーザーID（メンバー一覧や選択一覧におけるインデックス)を通知 |
-| room list | { rooms: ['room1', 'room2', ... ] } | 参加可能な部屋の一覧を返す |
+| room list | [{ room_id: 'room1', host: 'host user', people: number_of_people }, ... ] } | 参加可能な部屋の一覧を返す |
 | start | { members : ['user1', 'user2', ... ], turns: turns } | ゲームの始まりとターン数を通知 |
 | everyone selected | { turn_num : [現在のターン数], numbers: [2, 4, 1, ... ] } | 全員が選択し終わったことを通知。 |
 | finish | | ゲーム終了を通知 |
