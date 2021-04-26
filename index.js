@@ -14,6 +14,15 @@ io.on('connection',function(socket){
   console.log('connected');
 
   socket.on('create', (room_id, username) => {
+    /*
+    // 同じ名前の部屋を作れなくする処理
+    // デバックしづらくなるのでコメントアウトしておく
+    if(Object.keys(rooms).includes(room_id)){
+      socket.emit('err', {
+        msg: 'room "' + room_id + '" already exists'
+      });
+      return;
+    }*/
     socket.join(room_id);
     rooms[room_id] = {
       members: [username],
@@ -82,6 +91,10 @@ io.on('connection',function(socket){
       members: rooms[room_id].members,
       turns: turns
     });
+  });
+
+  socket.on('re-entry', (room_id) => {
+    socket.join(room_id);
   });
 
   socket.on('choose', (room_id, user_id, turn_num, number) => {

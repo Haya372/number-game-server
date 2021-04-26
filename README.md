@@ -8,6 +8,7 @@ express + socketioによる実装
 | create | room_id, username | 部屋を作成するイベント。部屋を作成したユーザーはその部屋に入室する。 room_idは任意の文字列、usernameは表示するユーザー名 |
 | get rooms | | 参加可能な部屋一覧を取得するイベント |
 | join | room_id, username | 部屋に入室するイベント |
+| re-entry | room_id | なんらかの問題で接続が切れた場合の再入室処理 |
 | start | room_id, turns | ゲームを開始するイベント。 turnsでターン数を指定する |
 | choose | room_id, user_id, turn_num, number | user_idはユーザーの表示名ではない。turn_numは現在のターン番号, numberは選んだ数字 |
 | finish | | ゲームを終了する |
