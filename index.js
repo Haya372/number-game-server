@@ -135,6 +135,10 @@ io.on('connection',function(socket){
       io.to(room_id).emit('finish');
       delete rooms[room_id];
     });
+
+    socket.on('exit room', (room_id) => {
+      socket.leave(room_id);
+    });
   });
 });
 

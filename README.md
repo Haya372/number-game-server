@@ -11,6 +11,7 @@ express + socketioによる実装
 | re-entry | room_id | なんらかの問題で接続が切れた場合の再入室処理 |
 | start | room_id, turns | ゲームを開始するイベント。 turnsでターン数を指定する |
 | choose | room_id, user_id, turn_num, number | user_idはユーザーの表示名ではない。turn_numは現在のターン番号, numberは選んだ数字 |
+| exit room | room_id | サーバー側でルームを退出する処理 |
 | finish | | ゲームを終了する |
 ### server -> client
 | イベント名 | パラメータ | 詳細 |

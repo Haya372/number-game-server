@@ -72,6 +72,7 @@
       $('#choose_test').on('click', ()=>{
         socket.emit('choose', room_id, user_id, turn_num, $('#number').val());
         turn_num += 1;
+        if(turn_num === 5) turn_num = 1;
       });
 
       $('#finish_test').on('click', ()=>{
