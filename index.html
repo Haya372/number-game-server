@@ -26,6 +26,11 @@
       <button id="get_test">list</button>
     </div>
     <div>
+      <p>leave</p>
+        <button id="leave_test">leave</button>
+    </div>
+
+    <div>
       <p>start</p>
         <button id="start_test">start</button>
     </div>
@@ -79,6 +84,10 @@
         socket.emit('finish', room_id);
       });
 
+      $('#leave_test').on('click', ()=>{
+        socket.emit('leave', room_id, user_id);
+      });
+
       socket.on('enter', (data) => {
         console.log('enter');
         console.log(JSON.stringify(data));
@@ -102,6 +111,11 @@
       socket.on('everyone selected', (data) => {
         console.log('everyone selected')
         console.log(JSON.stringify(data));
+      });
+
+      socket.on('leave', (data) => {
+        console.log('leave : ' + data);
+        if(data < user_id) user_id--;
       });
 
       socket.on('finish', () => {

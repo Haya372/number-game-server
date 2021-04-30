@@ -77,6 +77,12 @@ io.on('connection',function(socket){
     });
   });
 
+  socket.on('leave', (room_id, user_id) => {
+    rooms[room_id].members.splice(user_id, 1);
+    socket.leave(room_id);
+    io.to(room_id).emit('leave', user_id);
+  });
+
   socket.on('start', (room_id, turns) => {
     if(!Object.keys(rooms).includes(room_id)){
       socket.emit('err', {
